@@ -9,6 +9,8 @@ library(rpart)
 library(rpart.plot)
 library(rattle)
 library(RColorBrewer)
+library(dplyr)
+
 
 training1<-read.csv("file:///C:/Users/User/Desktop/Titanic/train.csv")
 testing1<-read.csv("file:///C:/Users/User/Desktop/Titanic/test.csv")
@@ -223,15 +225,17 @@ rfTraining3<-train(Survived~., data = completeTraining3, method="rf", trControl=
 rfTraining3 
 
 svmTraining3<-train(Survived~., data = completeTraining3, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
-svmTraining3 #PPPgood
+svmTraining3 #Pgood
+#Accuracy   Kappa    
+#0.8264137  0.6249368
 
 gbmTraining3<-train(Survived~., data = completeTraining3, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
 gbmTraining3 
 
 c5Training3<-train(Survived~., data=completeTraining3, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training3 #Good
+c5Training3 
 
-myFitF3<-train(Survived~., data=completeTraining3, method="rpart", trControl=myCtrl, preProcess=c("center", "scale") )
+myFitF3<-train(Survived~., data=completeTraining3, method="rpart", trControl=ctrl, preProcess=c("center", "scale") )
 myFitF3
 
 FinalResult3<-resamples(list(gbm3=gbmTraining3, svm3=svmTraining3,C5.3=c5Training3,rf3=rfTraining3, rpart3=myFitF3))
@@ -245,14 +249,16 @@ rfTraining5
 
 svmTraining5<-train(Survived~., data = completeTraining5, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
 svmTraining5 #Pgood
+#Accuracy   Kappa    
+#0.8249606  0.6221666
 
 gbmTraining5<-train(Survived~., data = completeTraining5, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
-gbmTraining5 #PPgood
+gbmTraining5 
 
 c5Training5<-train(Survived~., data=completeTraining5, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
 c5Training5
 
-myFitF5<-train(Survived~., data=completeTraining5, method="rpart", trControl=myCtrl, preProcess=c("center", "scale") )
+myFitF5<-train(Survived~., data=completeTraining5, method="rpart", trControl=ctrl, preProcess=c("center", "scale") )
 myFitF5
 
 
@@ -265,17 +271,17 @@ rfTraining2
 
 svmTraining2<-train(Survived~., data = completeTraining3, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
 svmTraining2 #PPgood
+#Accuracy   Kappa   
+#0.8264716  0.624975
 
 gbmTraining2<-train(Survived~., data = completeTraining3, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
-gbmTraining2 #pGood
+gbmTraining2 
 
 c5Training2<-train(Survived~., data=completeTraining2, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training2 #good
+c5Training2 
 
-myFitF2<-train(Survived~., data=completeTraining2, method="rpart", trControl=myCtrl, preProcess=c("center", "scale") )
-myFitF2
 
-FinalResult2<-resamples(list(gbm2=gbmTraining2, svm2=svmTraining2,C5.2=c5Training2,rf2=rfTraining2, rpart2=myFitF2))
+FinalResult2<-resamples(list(gbm2=gbmTraining2, svm2=svmTraining2,C5.2=c5Training2,rf2=rfTraining2))
 dotplot(FinalResult2)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 completeTraining1<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked")]
@@ -284,66 +290,31 @@ rfTraining1
 
 svmTraining1<-train(Survived~., data = completeTraining3, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
 svmTraining1 #pgood
+#Accuracy   Kappa    
+#0.8267575  0.6257501
 
 gbmTraining1<-train(Survived~., data = completeTraining3, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
 gbmTraining1 
 
 c5Training1<-train(Survived~., data=completeTraining3, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training1 #Good
-
+c5Training1 
 
 FinalResult1<-resamples(list(gbm1=gbmTraining1, svm1=svmTraining1,C5.1=c5Training1,rf1=rfTraining1))
 dotplot(FinalResult1)
  #+++++++++++++++++++++++++++++++++++++FINAL RESULT+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Result<-resamples(list(svm3=svmTraining3, gbm=gbmTraining5, svm2=svmTraining2, svm1=svmTraining1))
+Result<-resamples(list(svm3=svmTraining3, sv5=svmTraining5, svm2=svmTraining2, svm1=svmTraining1))
 dotplot(Result)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-#+++++++++++++++++++++++++++++++++++++++++++++
-#_#_#_#_#__#_#_#_#_#_#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#+#
-#Classification Tree with rpart
-
-#+++++++++++++++++++++++++++++VALIDATING THE MODEL ON THE TESTING SET(myTrainTest) FROM completeTraining 
+#+++++++++++++++++++++++++++++MAKING PREDICTIION  
 myFirstPred1<-predict(svmTraining1, completeTesting)
 myFirstPred1
 
-#myData2$Parch <- training1[sample(1:nrow(training1),418, replace = FALSE),]$Parch
 mySolution <- data.frame(PassengerId = completeTesting$PassengerId, Survived = myFirstPred1)
 View(mySolution)
-#++++++++++++++++++++++++++++++LET'S TRY TO DO A NEW DATA PARTITION WITH THE WHOLE DATASET
-completeTesting$Survived<-as.factor(myFirstPred1)
-AllData<-rbind(completeTraining, completeTesting)
 
-
-
-set.seed(123)
-myintrain<-createDataPartition(AllData$Survived, p=.80, list = FALSE)
-Alltrain<-AllData[1:891,]
-Alltest<-AllData[892:1309,]
-
-cotrl<-trainControl(method = "repeatedcv", repeats = 3, number = 10)
-
-AlltrainData<-Alltrain[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked")]
-rfAll<-train(Survived~., data = AlltrainData, method="rf", trControl=cotrl, preProcess = c("center","scale"))
-rfAll 
-
-svmAll<-train(Survived~., data = AlltrainData, method="svmLinear", trControl=cotrl, preProcess = c("center","scale"))
-svmAll #PPPgood
-
-gbmAll<-train(Survived~., data = AlltrainData, method="gbm", trControl=cotrl, preProcess = c("center","scale"))
-gbmAll
-
-c5All<-train(Survived~., data=AlltrainData, method="C5.0", trControl=cotrl, preProcess=c("center","scale"))
-c5All #Good
-
-myFitAll<-train(Survived~., data=AlltrainData, method="rpart", trControl=cotrl, preProcess=c("center", "scale") )
-myFitAll
-
-FinalRe<-resamples(list(gbm3=gbmAll, svm3=svmAll,C5.3=c5All,rf3=rfAll, rpart3=myFitAll))
-dotplot(FinalRe)
-
+write.csv(mySolution, file = "TitanicPred.csv",row.names = FALSE)
 
 
 
