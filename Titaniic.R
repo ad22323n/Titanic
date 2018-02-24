@@ -219,102 +219,73 @@ View(completeTesting)
 
 ctrl<-trainControl(method = "repeatedcv", number = 10, repeats = 3) 
 
+metric<-"Accuracy"
+mtry<-sqrt(ncol(completeTraining))
+tunegrid <- expand.grid(.mtry=mtry)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 completeTraining3<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked", "myFamSize","FamNumber")]
-rfTraining3<-train(Survived~., data = completeTraining3, method="rf", trControl=ctrl, preProcess = c("center","scale"))
+
+rfTraining3<-train(Survived~., data = completeTraining3, method="rf", trControl=ctrl, preProcess = c("center","scale"),metric=metric,
+                   tuneGrid=tunegrid)
 rfTraining3 
 
-svmTraining3<-train(Survived~., data = completeTraining3, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
-svmTraining3 #Pgood
-#Accuracy   Kappa    
-#0.8264137  0.6249368
 
-gbmTraining3<-train(Survived~., data = completeTraining3, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
-gbmTraining3 
-
-c5Training3<-train(Survived~., data=completeTraining3, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training3 
-
-myFitF3<-train(Survived~., data=completeTraining3, method="rpart", trControl=ctrl, preProcess=c("center", "scale") )
-myFitF3
-
-FinalResult3<-resamples(list(gbm3=gbmTraining3, svm3=svmTraining3,C5.3=c5Training3,rf3=rfTraining3, rpart3=myFitF3))
-dotplot(FinalResult3)
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-completeTraining5<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked", "myFamSize")]
-rfTraining5<-train(Survived~., data = completeTraining5, method="rf", trControl=ctrl, preProcess = c("center","scale"))
+completeTraining5<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked", "myFamSize","FamNumber")]
+
+rfTraining5<-train(Survived~., data = completeTraining5, method="rf", trControl=ctrl, preProcess = c("center","scale"),
+                   metric=metric,
+                   tuneGrid=tunegrid)
 rfTraining5
 
-svmTraining5<-train(Survived~., data = completeTraining5, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
-svmTraining5 #Pgood
-#Accuracy   Kappa    
-#0.8249606  0.6221666
 
-gbmTraining5<-train(Survived~., data = completeTraining5, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
-gbmTraining5 
-
-c5Training5<-train(Survived~., data=completeTraining5, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training5
-
-myFitF5<-train(Survived~., data=completeTraining5, method="rpart", trControl=ctrl, preProcess=c("center", "scale") )
-myFitF5
-
-
-FinalResult5<-resamples(list( svm5=svmTraining5,gbm5=gbmTraining5,C5.5=c5Training5,rf5=rfTraining5, rpart5=myFitF5))
-dotplot(FinalResult5)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-completeTraining2<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked","FamNumber")]
-rfTraining2<-train(Survived~., data = completeTraining3, method="rf", trControl=ctrl, preProcess = c("center","scale"))
+completeTraining2<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked","FamNumber", "Age")]
+rfTraining2<-train(Survived~., data = completeTraining3, method="rf", trControl=ctrl, preProcess = c("center","scale")
+                   ,metric=metric,
+                   tuneGrid=tunegrid)
 rfTraining2 
 
-svmTraining2<-train(Survived~., data = completeTraining3, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
-svmTraining2 #PPgood
-#Accuracy   Kappa   
-#0.8264716  0.624975
 
-gbmTraining2<-train(Survived~., data = completeTraining3, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
-gbmTraining2 
-
-c5Training2<-train(Survived~., data=completeTraining2, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training2 
-
-
-FinalResult2<-resamples(list(gbm2=gbmTraining2, svm2=svmTraining2,C5.2=c5Training2,rf2=rfTraining2))
-dotplot(FinalResult2)
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-completeTraining1<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked")]
-rfTraining1<-train(Survived~., data = completeTraining3, method="rf", trControl=ctrl, preProcess = c("center","scale"))
+completeTraining1<-completeTraining[,c("Survived","Pclass","myFamSize","Sex", "Title","Embarked", "Age", "SibSp")]
+rfTraining1<-train(Survived~., data = completeTraining3, method="rf", trControl=ctrl, preProcess = c("center","scale")
+                   ,metric=metric,
+                   tuneGrid=tunegrid)
 rfTraining1
 
-svmTraining1<-train(Survived~., data = completeTraining3, method="svmLinear", trControl=ctrl, preProcess = c("center","scale"))
-svmTraining1 #pgood
-#Accuracy   Kappa    
-#0.8267575  0.6257501
 
-gbmTraining1<-train(Survived~., data = completeTraining3, method="gbm", trControl=ctrl, preProcess = c("center","scale"))
-gbmTraining1 
-
-c5Training1<-train(Survived~., data=completeTraining3, method="C5.0", trControl=ctrl, preProcess=c("center","scale"))
-c5Training1 
-
-FinalResult1<-resamples(list(gbm1=gbmTraining1, svm1=svmTraining1,C5.1=c5Training1,rf1=rfTraining1))
-dotplot(FinalResult1)
  #+++++++++++++++++++++++++++++++++++++FINAL RESULT+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Result<-resamples(list(svm3=svmTraining3, sv5=svmTraining5, svm2=svmTraining2, svm1=svmTraining1))
-dotplot(Result)
+completeTraining6<-completeTraining[,c("Survived","Pclass","Fare", "Parch","Sex", "Title","Embarked","Age")]
+
+rfTraining6<-train(Survived~., data = completeTraining6, method="rf", trControl=ctrl, preProcess = c("center","scale")
+                   ,metric=metric,
+                   tuneGrid=tunegrid)
+rfTraining6
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+scales <- list(x=list(relation="free"), y=list(relation="free")) 
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Result<-resamples(list(rf1=rfTraining1, rf2=rfTraining2,rf5=rfTraining5,rf6=rfTraining6, rf3=rfTraining3))
+dotplot(Result, scales=scales)
+bwplot(Result, scales=scales)
+dif2<-diff(Result)
+summary(dif2)
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #+++++++++++++++++++++++++++++MAKING PREDICTIION  
-myFirstPred1<-predict(svmTraining1, completeTesting)
+myFirstPred1<-predict(rfTraining6, completeTesting)
 myFirstPred1
 
 mySolution <- data.frame(PassengerId = completeTesting$PassengerId, Survived = myFirstPred1)
 View(mySolution)
 
-write.csv(mySolution, file = "TitanicPred.csv",row.names = FALSE)
+write.csv(mySolution, file = "TitanicPred1.csv",row.names = FALSE)
 
 
 
