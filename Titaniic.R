@@ -229,7 +229,8 @@ rfTraining3<-train(Survived~., data = completeTraining3, method="rf", trControl=
                    tuneGrid=tunegrid)
 rfTraining3 
 
-
+#Accuracy   Kappa    
+#0.8201473  0.6102524
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -239,7 +240,8 @@ rfTraining5<-train(Survived~., data = completeTraining5, method="rf", trControl=
                    metric=metric,
                    tuneGrid=tunegrid)
 rfTraining5
-
+#Accuracy   Kappa    
+#0.8233194  0.6178301
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 completeTraining2<-completeTraining[,c("Survived","Pclass","SibSp", "Parch","Sex", "Title","Embarked","FamNumber", "Age")]
@@ -247,7 +249,8 @@ rfTraining2<-train(Survived~., data = completeTraining3, method="rf", trControl=
                    ,metric=metric,
                    tuneGrid=tunegrid)
 rfTraining2 
-
+#Accuracy   Kappa    
+#0.8207228  0.6126245
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 completeTraining1<-completeTraining[,c("Survived","Pclass","myFamSize","Sex", "Title","Embarked", "Age", "SibSp")]
@@ -256,8 +259,9 @@ rfTraining1<-train(Survived~., data = completeTraining3, method="rf", trControl=
                    tuneGrid=tunegrid)
 rfTraining1
 
-
- #+++++++++++++++++++++++++++++++++++++FINAL RESULT+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#Accuracy   Kappa   
+#0.8233928  0.618721
+#+++++++++++++++++++++++++++++++++++++FINAL RESULT+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 completeTraining6<-completeTraining[,c("Survived","Pclass","Fare", "Parch","Sex", "Title","Embarked","Age")]
 
@@ -265,6 +269,9 @@ rfTraining6<-train(Survived~., data = completeTraining6, method="rf", trControl=
                    ,metric=metric,
                    tuneGrid=tunegrid)
 rfTraining6
+
+#Accuracy  Kappa    
+#0.829718  0.6254213
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 scales <- list(x=list(relation="free"), y=list(relation="free")) 
@@ -286,6 +293,3 @@ mySolution <- data.frame(PassengerId = completeTesting$PassengerId, Survived = m
 View(mySolution)
 
 write.csv(mySolution, file = "TitanicPred1.csv",row.names = FALSE)
-
-
-
